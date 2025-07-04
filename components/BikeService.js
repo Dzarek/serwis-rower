@@ -5,7 +5,7 @@ import AllBikeOffer from "./AllBikeOffer";
 import { BsGearFill } from "react-icons/bs";
 import Aos from "aos";
 import "aos/dist/aos.css";
-// import { SRLWrapper } from "simple-react-lightbox";
+
 import Carousel from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import {
@@ -13,8 +13,15 @@ import {
   MdOutlineArrowForwardIos,
 } from "react-icons/md";
 
+import Lightbox from "yet-another-react-lightbox";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+
 const BikeService = ({ imagesRower, przegladRower, cenyRower }) => {
   const [activePakiet, setActivePakiet] = useState(null);
+  const [index, setIndex] = useState(-1);
   const [iconClass, setIconClass] = useState("pakietIcon");
   const [showAllBikeOffer, setShowAllBikeOffer] = useState(false);
   useEffect(() => {
@@ -36,6 +43,13 @@ const BikeService = ({ imagesRower, przegladRower, cenyRower }) => {
     }
   }, [activePakiet]);
 
+  // let galeryAray = [];
+  const galeryAray = imagesRower.map((item) => {
+    return { src: item };
+  });
+
+  const img1 = "/images/bikeService/1.jpg";
+
   return (
     <Wrapper className="mainPage" id="bikeService">
       <div className="title">
@@ -51,19 +65,7 @@ const BikeService = ({ imagesRower, przegladRower, cenyRower }) => {
         Wykonane naprawy poprzedzone są diagnozą która daje możliwość
         dopasowania usługi do Waszych potrzeb. <br /> Zapraszamy!
       </p>
-      {/* <div className="imgContainerDesktop">
-        <SRLWrapper>
-          <div className="imgContainerHorizontal">
-            <img src={img1} alt="" />
-            <img src={img2} alt="" />
-            <img src={img3} alt="" />
-            <img src={img4} alt="" />
-            <img src={img4} alt="" />
-            <img src={img4} alt="" />
-          </div>
-        </SRLWrapper>
-      </div> */}
-      {/* <SRLWrapper> */}
+
       <Carousel
         className="carouselM"
         infinite
@@ -82,9 +84,23 @@ const BikeService = ({ imagesRower, przegladRower, cenyRower }) => {
         arrowRight={<MdOutlineArrowForwardIos className="arrow" />}
       >
         {imagesRower.map((item, index) => {
-          return <img key={index} src={item} alt="" />;
+          return (
+            <img
+              key={index}
+              src={item}
+              alt={index + 1}
+              onClick={() => setIndex(index)}
+            />
+          );
         })}
       </Carousel>
+      <Lightbox
+        index={index}
+        open={index >= 0}
+        close={() => setIndex(-1)}
+        slides={galeryAray}
+        plugins={[Thumbnails, Fullscreen]}
+      />
       {/* </SRLWrapper> */}
       <section className="pakiety">
         <div
