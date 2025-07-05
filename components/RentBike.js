@@ -13,9 +13,26 @@ import {
 } from "react-accessible-accordion";
 import { MdExpandMore } from "react-icons/md";
 
-const RentBike = ({ ebike, ebikeregulation, ebikeTitle, ebikeSubtitle }) => {
+import Carousel from "@brainhubeu/react-carousel";
+import "@brainhubeu/react-carousel/lib/style.css";
+
+import Lightbox from "yet-another-react-lightbox";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+
+const RentBike = ({
+  ebike,
+  ebikeregulation,
+  ebikeTitle,
+  ebikeSubtitle,
+  ebikeImages,
+}) => {
   const [activeStep, setActiveStep] = useState(null);
   const [openRegulation, setOpenRegulation] = useState(false);
+  const [index, setIndex] = useState(-1);
+
   useEffect(() => {
     Aos.init({ duration: 1000, disable: "mobile" });
   }, []);
@@ -24,6 +41,10 @@ const RentBike = ({ ebike, ebikeregulation, ebikeTitle, ebikeSubtitle }) => {
     const filteredEbike = ebike.find((item) => item.id === id);
     setActiveStep(filteredEbike);
   };
+
+  const galleryArray = ebikeImages.map((item) => {
+    return { src: item };
+  });
 
   return (
     <>
@@ -35,12 +56,26 @@ const RentBike = ({ ebike, ebikeregulation, ebikeTitle, ebikeSubtitle }) => {
         </div>
         <p className="bikeMainInfo">{ebikeSubtitle}</p>
         <div className="imageContentMobile">
-          <img
-            data-aos="flip-left"
-            data-aos-offset="200"
-            src="/images/rentbike/rentbike3.jpeg"
-            alt=""
-          />
+          <Carousel
+            className="carouselM"
+            infinite
+            autoPlay={3000}
+            animationSpeed={1000}
+            slidesPerPage={1}
+            stopAutoPlayOnHover
+            draggable={false}
+          >
+            {ebikeImages.map((item, index) => {
+              return (
+                <img
+                  key={index}
+                  src={item}
+                  alt={index + 1}
+                  onClick={() => setIndex(index)}
+                />
+              );
+            })}
+          </Carousel>
         </div>
         <div className="container">
           <h3>6 kroków wypożyczenia roweru</h3>
@@ -123,20 +158,27 @@ const RentBike = ({ ebike, ebikeregulation, ebikeTitle, ebikeSubtitle }) => {
             </div>
           )}
         </div>
+
         <div className="imageContent">
-          <img
-            data-aos="flip-left"
-            data-aos-offset="200"
-            src="/images/rentbike/rentbike2.jpg"
-            alt=""
-          />
-          <img
-            data-aos="flip-right"
-            data-aos-offset="200"
-            src="/images/rentbike/rentbike1.jpg"
-            alt=""
-          />
+          {ebikeImages.map((item, index) => {
+            return (
+              <img
+                data-aos="zoom-in"
+                key={index}
+                src={item}
+                alt={index + 1}
+                onClick={() => setIndex(index)}
+              />
+            );
+          })}
         </div>
+        <Lightbox
+          index={index}
+          open={index >= 0}
+          close={() => setIndex(-1)}
+          slides={galleryArray}
+          plugins={[Thumbnails, Fullscreen]}
+        />
       </Wrapper>
       {openRegulation && (
         <EbikeRegulation
@@ -337,36 +379,25 @@ const Wrapper = styled.div`
   .imageContent {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 10vh;
+    justify-content: space-between;
+    width: 85vw;
+    margin: 10vh auto 0;
     @media screen and (max-width: 800px) {
       display: none;
     }
     img {
-      width: 30vw;
+      width: 30%;
       border-radius: 5px;
-      margin: 0 5vw;
-      @media screen and (min-width: 1700px) {
-        width: 25vw;
+      cursor: pointer;
+      filter: saturate(0.5);
+      transition: 0.5s;
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+      :hover {
+        filter: none;
       }
     }
   }
-  .imageContentMobile {
-    @media screen and (min-width: 801px) {
-      display: none;
-    }
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 90vw;
-    margin: 5vh auto;
-    img {
-      width: 100%;
-      height: 50vh;
-      object-fit: cover;
-      border-radius: 5px;
-    }
-  }
+
   .rentStepsMobile {
     @media screen and (min-width: 801px) {
       display: none;
@@ -433,6 +464,35 @@ const Wrapper = styled.div`
           text-align: center;
           font-size: 1.1rem;
         }
+      }
+    }
+  }
+  .imageContentMobile {
+    display: block;
+    @media screen and (min-width: 801px) {
+      display: none;
+    }
+  }
+  .carouselM {
+    margin: 10vh auto 0;
+    width: 90vw;
+
+    img {
+      width: 17vw;
+      height: 13vw;
+      object-fit: cover;
+      border-radius: 5px;
+      box-shadow: 2px 2px 5px 0 #111;
+      cursor: pointer;
+    }
+    @media screen and (max-width: 800px) {
+      img {
+        width: 90%;
+        height: 33vh;
+        object-fit: cover;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px 0 #111;
+        cursor: pointer;
       }
     }
   }

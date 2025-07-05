@@ -26,6 +26,7 @@ export default function Home({
   ebikeregulation,
   ebikeTitle,
   ebikeSubtitle,
+  ebikeImages,
 }) {
   return (
     <>
@@ -54,6 +55,7 @@ export default function Home({
         ebikeregulation={ebikeregulation}
         ebikeTitle={ebikeTitle}
         ebikeSubtitle={ebikeSubtitle}
+        ebikeImages={ebikeImages}
       />
       <AboutUs />
       <Workout treningi={treningi} />
@@ -66,6 +68,7 @@ export default function Home({
 export async function getStaticProps() {
   let data;
   let imagesRower;
+  let ebikeImages;
   let przegladRower;
   let cenyRower;
   let cenyNarty;
@@ -92,6 +95,11 @@ export async function getStaticProps() {
     imagesRower = data.imagesRower;
   } else {
     imagesRower = localData.imagesRower;
+  }
+  if (data.ebikeImages) {
+    ebikeImages = data.ebikeImages;
+  } else {
+    ebikeImages = localData.ebikeImages;
   }
   if (data.przegladRower) {
     przegladRower = data.przegladRower;
@@ -151,6 +159,7 @@ export async function getStaticProps() {
       ebikeregulation,
       ebikeTitle,
       ebikeSubtitle,
+      ebikeImages,
     },
     revalidate: 60,
   };

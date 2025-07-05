@@ -43,12 +43,9 @@ const BikeService = ({ imagesRower, przegladRower, cenyRower }) => {
     }
   }, [activePakiet]);
 
-  // let galeryAray = [];
   const galeryAray = imagesRower.map((item) => {
     return { src: item };
   });
-
-  const img1 = "/images/bikeService/1.jpg";
 
   return (
     <Wrapper className="mainPage" id="bikeService">
@@ -101,7 +98,6 @@ const BikeService = ({ imagesRower, przegladRower, cenyRower }) => {
         slides={galeryAray}
         plugins={[Thumbnails, Fullscreen]}
       />
-      {/* </SRLWrapper> */}
       <section className="pakiety">
         <div
           className="onePakiet basic"
